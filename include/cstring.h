@@ -46,7 +46,6 @@ inline void* memset_explicit(void *dest, int ch, size_t count)
   //
   // std::atomic_thread_fence:
   // gcc 9.3.0 -std=c++17 -O2 generates mfence asm instruction; the call of memset is not optimized away
-  //
   // std::atomic_signal_fence:
   // gcc 9.3.0 -std=c++17 -O2 no mfence asm instruction is generated,
   // however the call of memset is not optimized away too
