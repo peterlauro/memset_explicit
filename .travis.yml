@@ -1,0 +1,42 @@
+language: cpp
+os: linux
+dist: bionic
+compiler: gcc
+
+matrix:
+  include:
+    - name: "Bionic GNU G++ (g++ 10.1.0) Debug"
+      addons:
+        apt:
+          sources:
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          packages:
+            - g++-10
+      env:
+        - MATRIX_EVAL="CC=gcc-10 && CXX=g++-10 && BUILD_TYPE=Debug"
+
+    - name: "Bionic GNU G++ (g++ 10.1.0) Release"
+      addons:
+        apt:
+          sources:
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          packages:
+            - g++-10
+      env:
+        - MATRIX_EVAL="CC=gcc-10 && CXX=g++-10 && BUILD_TYPE=Release"
+
+before_install:
+  - eval "${MATRIX_EVAL}"
+
+install:
+  - echo ${CC}
+  - echo ${CXX}
+  - echo ${BUILD_TYPE}
+  - ${CXX} --version
+  - cmake --version
+
+script:
+  - mkdir -p build && cd build
+  - cmake -DCMAKE_CXX_COMPILER=${CXX} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
+  - make clean && make -k
+  - ctest -C ${BUILD_TYPE} -V --output-on-failure
