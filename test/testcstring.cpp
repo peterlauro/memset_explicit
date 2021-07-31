@@ -65,9 +65,9 @@ namespace CZM::test
 
         std::this_thread::sleep_for(5ms);
 
-        EXPECT_EQ(
+        EXPECT_NE(
             memcmp(static_cast<unsigned char*>(stack_base) + stack_size - buffer_size, pattern, pattern_size),
-            -2);
+            0);
 
         EXPECT_EQ(pthread_join(tid, nullptr), 0);
         EXPECT_EQ(pthread_attr_destroy(&attr), 0);
@@ -97,9 +97,9 @@ namespace CZM::test
             0);
 #else
         // ordinary memset is not optimized away
-        EXPECT_EQ(
+        EXPECT_NE(
             memcmp(static_cast<unsigned char*>(stack_base) + stack_size - buffer_size, pattern, pattern_size),
-            -2);
+            0);
 #endif
 
         EXPECT_EQ(pthread_join(tid, nullptr), 0);
